@@ -73,6 +73,8 @@ class ViewController: UIViewController {
         playSound()
         
         if currentOperation != Operation.Empty{
+            
+            if runningNumber != "" {
             //Do math
             rightSide = runningNumber
             runningNumber = ""
@@ -92,6 +94,7 @@ class ViewController: UIViewController {
             
             leftSide = result
             lbNum.text = result
+            }
             
             currentOperation = op
             
