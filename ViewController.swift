@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import Darwin
 
 class ViewController: UIViewController {
     
@@ -29,7 +28,6 @@ class ViewController: UIViewController {
     var secondNumber: String = ""
     var currentNumber: String = ""
     var result: String = ""
-    let dmax = DBL_MAX
     
     var currentOperation: Operation = Operation.Empty
     
@@ -47,7 +45,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func OnNumberPress(but: UIButton!){
-        butSound.play()
+        playSound()
         
         if lbNum.text == result {
         currentNumber = "\(but.tag)"
@@ -87,6 +85,7 @@ class ViewController: UIViewController {
         
         playSound()
         
+        //Chech for input and current variables used for math
         if currentNumber == "" {
             return
         } else if firstNumber == "" {
@@ -97,7 +96,7 @@ class ViewController: UIViewController {
             currentNumber = ""
         }
         
-        
+        //Check if we have all things needed for operations, if yes then lets do some math!
         if firstNumber != "" && secondNumber != ""  && currentNumber == ""{
             math(currentOperation)
             firstNumber = ""
@@ -133,7 +132,6 @@ class ViewController: UIViewController {
         } else {
             butSound.play()
         }
-        
     }
 }
 
