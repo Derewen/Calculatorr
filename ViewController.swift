@@ -85,6 +85,8 @@ class ViewController: UIViewController {
     
     func doOperation(operation: Operation) {
         
+        playSound()
+        
         if currentNumber == "" {
             return
         } else if firstNumber == "" {
@@ -122,6 +124,16 @@ class ViewController: UIViewController {
         else if op == Operation.Equals {
             doOperation(currentOperation)
         }
+    }
+    
+    func playSound() {
+        
+        if butSound.playing {
+            butSound.stop()
+        } else {
+            butSound.play()
+        }
+        
     }
 }
 
