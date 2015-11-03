@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Darwin
 
 class ViewController: UIViewController {
     
@@ -21,12 +22,15 @@ class ViewController: UIViewController {
         case Substract = "-"
         case Add = "+"
         case Empty = ""
+        case Equals = "="
     }
     
-    var leftSide: String = ""
-    var rightSide: String = ""
-    var runningNumber: String = ""
+    var firstNumber: String = ""
+    var secondNumber: String = ""
+    var currentNumber: String = ""
     var result: String = ""
+    let dmax = DBL_MAX
+    
     var currentOperation: Operation = Operation.Empty
     
     override func viewDidLoad(){
@@ -43,76 +47,83 @@ class ViewController: UIViewController {
     }
     
     @IBAction func OnNumberPress(but: UIButton!){
-        playSound()
+        butSound.play()
         
-        runningNumber += "\(but.tag)"
-        lbNum.text = runningNumber
+        if lbNum.text == result {
+        currentNumber = "\(but.tag)"
+        }
+        else {
+            currentNumber += "\(but.tag)"
+        }
+        lbNum.text = currentNumber
     }
     
     @IBAction func OnDividePress(sender: AnyObject) {
-        proccesOperation(Operation.Divide)
+        currentOperation = Operation.Divide
+        doOperation(currentOperation)
     }
     
     @IBAction func OnMultiplyPress(sender: AnyObject) {
-        proccesOperation(Operation.Multiply)
+        currentOperation = Operation.Multiply
+        doOperation(currentOperation)
     }
     
     @IBAction func OnSubstractPress(sender: AnyObject) {
-        proccesOperation(Operation.Substract)
+        currentOperation = Operation.Substract
+        doOperation(currentOperation)
     }
     
     @IBAction func OnAddPress(sender: AnyObject) {
-        proccesOperation(Operation.Add)
+        currentOperation = Operation.Add
+        doOperation(currentOperation)
     }
     
     @IBAction func OnEqualPress(sender: AnyObject) {
-        proccesOperation(currentOperation)
+        doOperation(Operation.Equals)
     }
     
-    func proccesOperation(op: Operation){
-        playSound()
+    
+    func doOperation(operation: Operation) {
         
-        if currentOperation != Operation.Empty{
-            
-            if runningNumber != "" {
-            //Do math
-            rightSide = runningNumber
-            runningNumber = ""
-            
-            if currentOperation == Operation.Multiply {
-                result = "\(Double(leftSide)!  * Double(rightSide)!)"
-            }
-            else if currentOperation == Operation.Divide {
-                result = "\(Double(leftSide)! / Double(rightSide)!)"
-            }
-            else if currentOperation == Operation.Add {
-                result = "\(Double(leftSide)! + Double(rightSide)!)"
-            }
-            else if currentOperation == Operation.Substract {
-                result = "\(Double(leftSide)! - Double(rightSide)!)"
-            }
-            
-            leftSide = result
+        if currentNumber == "" {
+            currentOperation = Operation.Empty
+        } else if firstNumber == "" {
+            firstNumber = currentNumber
+            currentNumber = ""
+        } else if currentOperation == Operation.Empty {
+            currentOperation = operation
+        } else if secondNumber == "" {
+            secondNumber = currentNumber
+            currentNumber = ""
+        }
+        
+        if firstNumber != "" && secondNumber != "" {
+            math(currentOperation)
+            firstNumber = ""
+            secondNumber = ""
+            currentNumber = result
             lbNum.text = result
-            }
-            
-            currentOperation = op
-            
-        } else {
-            //First time operator being pressed
-            leftSide = runningNumber
-            runningNumber = ""
-            currentOperation = op
         }
         
     }
     
-    func playSound(){
-        if butSound.playing {
-        butSound.stop()
+    
+    func math(op: Operation) {
+        if op == Operation.Multiply {
+            result = "\(Double(firstNumber)!  * Double(secondNumber)!)"
         }
-        
-        butSound.play()
+        else if op == Operation.Divide {
+            result = "\(Double(firstNumber)! / Double(secondNumber)!)"
+        }
+        else if op == Operation.Add {
+            result = "\(Double(firstNumber)! + Double(secondNumber)!)"
+        }
+        else if op == Operation.Substract {
+            result = "\(Double(firstNumber)! - Double(secondNumber)!)"
+        }
+        else if op == Operation.Equals {
+            
+        }
     }
 }
 
