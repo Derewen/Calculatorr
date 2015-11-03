@@ -86,25 +86,23 @@ class ViewController: UIViewController {
     func doOperation(operation: Operation) {
         
         if currentNumber == "" {
-            currentOperation = Operation.Empty
+            return
         } else if firstNumber == "" {
             firstNumber = currentNumber
             currentNumber = ""
-        } else if currentOperation == Operation.Empty {
-            currentOperation = operation
         } else if secondNumber == "" {
             secondNumber = currentNumber
             currentNumber = ""
         }
         
-        if firstNumber != "" && secondNumber != "" {
+        
+        if firstNumber != "" && secondNumber != ""  && currentNumber == ""{
             math(currentOperation)
             firstNumber = ""
             secondNumber = ""
             currentNumber = result
             lbNum.text = result
         }
-        
     }
     
     
@@ -122,7 +120,7 @@ class ViewController: UIViewController {
             result = "\(Double(firstNumber)! - Double(secondNumber)!)"
         }
         else if op == Operation.Equals {
-            
+            doOperation(currentOperation)
         }
     }
 }
